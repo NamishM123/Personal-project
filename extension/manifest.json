@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Summer Tracker Job Saver",
-  "version": "0.1.0",
-  "description": "One-click save a job posting (LinkedIn, Indeed, company page) into your Summer Tracker.",
+  "version": "0.2.0",
+  "description": "One-click and auto-detect job applications. Saves to your Summer Tracker.",
   "permissions": ["activeTab", "storage", "scripting"],
   "host_permissions": ["<all_urls>"],
   "action": {
@@ -10,5 +10,22 @@
     "default_popup": "popup.html"
   },
   "background": { "service_worker": "background.js" },
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "exclude_matches": [
+        "*://*.google.com/*",
+        "*://*.youtube.com/*",
+        "*://*.facebook.com/*",
+        "*://*.twitter.com/*",
+        "*://*.x.com/*",
+        "*://*.instagram.com/*",
+        "*://*.reddit.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
 }
