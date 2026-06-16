@@ -2,32 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- Tokens (HSL channels for tailwind) ----------
+ * Off-white paper and warm near-black ink. One considered emerald accent.
+ * No pure white, no pure black, no purple/blue defaults.
+ */
 :root {
-  --bg: 0 0% 100%;
+  --bg: 48 18% 98%;          /* warm paper, not #fff */
   --surface: 0 0% 100%;
-  --surface-2: 220 14% 96%;
-  --border: 220 13% 91%;
-  --fg: 222 47% 11%;
-  --muted: 215 16% 47%;
-  --accent: 222 89% 55%;
+  --surface-2: 40 14% 95%;
+  --border: 36 10% 88%;
+  --fg: 28 18% 10%;          /* warm ink, not #000 */
+  --muted: 30 6% 42%;
+  --accent: 158 56% 36%;     /* deep emerald, low chroma */
   --accent-fg: 0 0% 100%;
-  --success: 142 71% 40%;
-  --warn: 38 92% 50%;
-  --danger: 0 84% 60%;
+  --success: 158 56% 36%;
+  --warn: 35 88% 48%;
+  --danger: 358 70% 50%;
+  --ring: 158 56% 36% / 0.32;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .dark {
-  --bg: 222 47% 6%;
-  --surface: 222 47% 8%;
-  --surface-2: 222 30% 12%;
-  --border: 222 25% 18%;
-  --fg: 210 40% 96%;
-  --muted: 215 16% 65%;
-  --accent: 217 91% 60%;
-  --accent-fg: 0 0% 100%;
-  --success: 142 71% 45%;
-  --warn: 38 92% 55%;
-  --danger: 0 84% 65%;
+  --bg: 30 8% 6%;            /* warm lacquer, not #000 */
+  --surface: 30 8% 8%;
+  --surface-2: 30 6% 12%;
+  --border: 30 5% 18%;
+  --fg: 40 10% 94%;          /* warm near-white */
+  --muted: 30 5% 62%;
+  --accent: 158 62% 50%;
+  --accent-fg: 30 18% 8%;
+  --success: 158 62% 50%;
+  --warn: 35 90% 60%;
+  --danger: 358 75% 65%;
+  --ring: 158 62% 50% / 0.4;
 }
 
 html, body {
@@ -35,11 +44,22 @@ html, body {
   color: hsl(var(--fg));
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
 }
 
 * { border-color: hsl(var(--border)); }
 
-::selection { background: hsl(var(--accent) / 0.25); }
+::selection { background: hsl(var(--accent) / 0.22); }
+
+/* Tabular numbers everywhere a class opts in */
+.nums { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+/* Focus ring: a single hairline, not a glow */
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 8px;
+}
 
 /* Scrollbar polish */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -48,3 +68,33 @@ html, body {
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted) / 0.4); }
+
+/* Dialog motion (transitions, not keyframes, so they can interrupt) */
+[data-dialog-overlay] {
+  opacity: 0;
+  transition: opacity 180ms var(--ease-out);
+}
+[data-dialog-overlay][data-state="open"] { opacity: 1; }
+
+[data-dialog-content] {
+  opacity: 0;
+  transform: scale(0.96) translateY(4px);
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 220ms var(--ease-out);
+}
+[data-dialog-content][data-state="open"] {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Honor reduced motion. We keep opacity (helps comprehension)
+ * and drop transform-based motion, per Emil's rule. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 120ms !important;
+  }
+  [data-dialog-content] { transform: none; }
+}

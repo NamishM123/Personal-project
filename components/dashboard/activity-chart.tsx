@@ -19,8 +19,8 @@ export function ActivityChart({ data }: { data: { day: string; jobs: number; lee
               fontSize: 12,
             }}
           />
-          <Bar dataKey="jobs" stackId="a" fill="hsl(var(--accent))" radius={[0, 0, 4, 4]} />
-          <Bar dataKey="leetcode" stackId="a" fill="hsl(var(--success))" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="jobs" stackId="a" fill="hsl(var(--fg) / 0.55)" radius={[0, 0, 4, 4]} />
+          <Bar dataKey="leetcode" stackId="a" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

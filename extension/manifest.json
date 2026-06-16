@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Summer Tracker — Job Saver",
+  "name": "Summer Tracker Job Saver",
   "version": "0.1.0",
   "description": "One-click save a job posting (LinkedIn, Indeed, company page) into your Summer Tracker.",
   "permissions": ["activeTab", "storage", "scripting"],

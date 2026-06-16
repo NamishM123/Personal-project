@@ -55,7 +55,7 @@ export function DailyForm({ onDone, initial }: { onDone: () => void; initial?: P
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label>Mood (1–5)</Label>
+        <Label>Mood (1 to 5)</Label>
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((n) => (
             <button

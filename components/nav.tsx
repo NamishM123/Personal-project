@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Briefcase, Code2, FolderGit2, Home, NotebookPen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { BrandMark } from "@/components/brand-mark";
 
 const items = [
   { href: "/", label: "Dashboard", icon: Home },
@@ -17,9 +18,9 @@ const items = [
 export function Nav() {
   const pathname = usePathname();
   return (
-    <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-border bg-surface md:flex">
-      <div className="flex h-14 items-center gap-2 px-5 border-b border-border">
-        <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-accent to-fuchsia-500" />
+    <aside className="sticky top-0 hidden h-[100dvh] w-60 shrink-0 flex-col border-r border-border bg-surface md:flex">
+      <div className="flex h-14 items-center gap-2.5 px-5 border-b border-border">
+        <BrandMark size={26} />
         <span className="text-sm font-semibold tracking-tight">Summer Tracker</span>
       </div>
       <nav className="flex-1 px-3 py-4 space-y-1">

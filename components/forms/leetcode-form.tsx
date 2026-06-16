@@ -79,7 +79,7 @@ export function LeetcodeForm({ onDone }: { onDone: () => void }) {
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label>URL (optional — auto-derived from title)</Label>
+        <Label>URL (optional, auto-derived from title)</Label>
         <Input
           value={form.url}
           onChange={(e) => setForm({ ...form, url: e.target.value })}

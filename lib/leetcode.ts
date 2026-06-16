@@ -2,7 +2,7 @@
  * LeetCode GraphQL client.
  *
  * The public `recentAcSubmissionList` endpoint returns recent accepted
- * submissions by username — no auth needed. For private profiles or older
+ * submissions by username, no auth needed. For private profiles or older
  * history, pass a LEETCODE_SESSION cookie via env.
  */
 

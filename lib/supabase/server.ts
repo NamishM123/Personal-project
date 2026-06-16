@@ -16,7 +16,7 @@ export function getSupabaseServer() {
           try {
             cookieStore.set({ name, value, ...options });
           } catch {
-            // Called from a Server Component — Next disallows mutation here.
+            // Called from a Server Component. Next disallows mutation here.
           }
         },
         remove(name: string, options: CookieOptions) {

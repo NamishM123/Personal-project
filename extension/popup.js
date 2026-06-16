@@ -1,4 +1,4 @@
-// popup.js — autofill the form from the current tab, then POST to your tracker.
+// popup.js: autofill the form from the current tab, then POST to your tracker.
 
 const $ = (id) => document.getElementById(id);
 
@@ -111,7 +111,7 @@ function guessSource(url) {
   }
 }
 
-// Executed in the page context — extracts what it can from common job-board layouts.
+// Executed in the page context. Extracts what it can from common job-board layouts.
 function extractFromPage() {
   function text(selector) {
     const el = document.querySelector(selector);

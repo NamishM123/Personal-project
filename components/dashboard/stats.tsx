@@ -19,7 +19,7 @@ export function Stats({
   const items = [
     { icon: <Briefcase size={16} />, label: "Jobs applied", main: jobsTotal, sub: `${jobs7} this week` },
     { icon: <Code2 size={16} />, label: "LeetCode solved", main: lcTotal, sub: `${lc7} this week` },
-    { icon: <FolderGit2 size={16} />, label: "Active projects", main: projectsActive, sub: "—" },
+    { icon: <FolderGit2 size={16} />, label: "Active projects", main: projectsActive, sub: "in flight" },
     { icon: <Flame size={16} />, label: "Daily-log streak", main: streak, sub: streak === 1 ? "day" : "days" },
   ];
   return (
@@ -31,7 +31,7 @@ export function Stats({
             <span className="text-xs font-medium">{s.label}</span>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-semibold tracking-tight">{s.main}</span>
+            <span className="nums text-3xl font-semibold tracking-tight">{s.main}</span>
             <span className="text-xs text-muted">{s.sub}</span>
           </div>
         </Card>

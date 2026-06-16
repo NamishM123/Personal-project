@@ -1,4 +1,4 @@
-# Summer Tracker — Browser Extension
+# Summer Tracker: Browser Extension
 
 A tiny Chrome/Edge extension that saves a job posting to your Summer Tracker in one click.
 

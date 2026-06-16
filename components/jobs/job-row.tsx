@@ -84,7 +84,7 @@ export function JobRow({ job }: { job: Job }) {
         </button>
       </div>
 
-      <Dialog open={editing} onClose={() => setEditing(false)} title={`Edit — ${job.company}`}>
+      <Dialog open={editing} onClose={() => setEditing(false)} title={`Edit ${job.company}`}>
         <JobForm
           onDone={() => setEditing(false)}
           initial={{

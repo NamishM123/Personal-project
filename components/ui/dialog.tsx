@@ -14,6 +14,24 @@ type DialogProps = {
 };
 
 export function Dialog({ open, onClose, title, description, children, className }: DialogProps) {
+  // We render the tree while open OR while closing, and drive the
+  // CSS transition via `data-state`. This gives us interruptible
+  // ease-out enter and exit per Emil's transition-not-keyframes rule.
+  const [mounted, setMounted] = React.useState(open);
+  const [state, setState] = React.useState<"open" | "closed">(open ? "open" : "closed");
+
+  React.useEffect(() => {
+    if (open) {
+      setMounted(true);
+      // Next frame so the initial closed styles apply before we flip to open.
+      const id = requestAnimationFrame(() => setState("open"));
+      return () => cancelAnimationFrame(id);
+    }
+    setState("closed");
+    const t = setTimeout(() => setMounted(false), 220);
+    return () => clearTimeout(t);
+  }, [open]);
+
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -27,27 +45,30 @@ export function Dialog({ open, onClose, title, description, children, className 
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!mounted) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        data-dialog-overlay
+        data-state={state}
+        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
         onClick={onClose}
         aria-hidden
       />
       <div
+        data-dialog-content
+        data-state={state}
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative w-full max-w-lg rounded-2xl border border-border bg-surface shadow-card",
-          "animate-in fade-in zoom-in-95",
+          "relative w-full max-w-lg rounded-2xl border border-border bg-surface shadow-[0_24px_70px_-20px_rgba(0,0,0,0.45)]",
           className
         )}
       >
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 rounded-md p-1 text-muted hover:bg-surface2 hover:text-fg"
+          className="absolute right-3 top-3 rounded-md p-1 text-muted transition-colors hover:bg-surface2 hover:text-fg active:scale-95"
           aria-label="Close"
         >
           <X size={16} />

@@ -57,15 +57,15 @@ export default async function Dashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Activity — last 14 days</CardTitle>
+            <CardTitle>Activity, last 14 days</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="mb-2 flex items-center gap-4 text-xs text-muted">
               <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-sm bg-accent" /> Jobs applied
+                <span className="h-2 w-2 rounded-sm bg-fg/55" /> Jobs applied
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-sm bg-success" /> LeetCode solved
+                <span className="h-2 w-2 rounded-sm bg-accent" /> LeetCode solved
               </span>
             </div>
             <ActivityChart data={chart} />

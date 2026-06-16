@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * CORS for /api/* — needed so the browser extension can POST jobs
+ * CORS for /api/*. Needed so the browser extension can POST jobs
  * with `credentials: "include"`. Only allow extension origins (any
  * chrome-extension:// origin is fine; we don't need a fixed ID).
  */

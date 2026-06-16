@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 /**
- * POST upserts on (user_id, day) — one log per day. Resending the form
+ * POST upserts on (user_id, day). One log per day. Resending the form
  * for the same day overwrites.
  */
 export async function POST(req: NextRequest) {

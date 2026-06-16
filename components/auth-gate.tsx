@@ -5,10 +5,11 @@ import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BrandMark } from "@/components/brand-mark";
 
 export function AuthGate({ children }: { children: React.ReactNode }) {
-  // Lazy-init so Supabase is never constructed during SSR / prerender —
-  // it only runs in the browser after hydration.
+  // Lazy-init so Supabase is never constructed during SSR / prerender.
+  // It runs in the browser after hydration.
   const [supabase] = useState(() => getSupabaseBrowser());
   const [ready, setReady] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
@@ -48,7 +49,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="flex h-screen items-center justify-center text-sm text-muted">
+      <div className="flex h-[100dvh] items-center justify-center text-sm text-muted">
         Loading…
       </div>
     );
@@ -57,10 +58,10 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
   if (signedIn) return <>{children}</>;
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-6">
+    <div className="flex min-h-[100dvh] items-center justify-center p-6">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="mb-3 h-10 w-10 rounded-xl bg-gradient-to-br from-accent to-fuchsia-500" />
+          <div className="mb-3"><BrandMark size={36} /></div>
           <CardTitle>Welcome back</CardTitle>
           <CardDescription>
             Sign in with a magic link. We&apos;ll email you a one-click login.
