@@ -6,8 +6,11 @@ summer day-to-day.
 
 - **Manual quick-add** for everything (one form, two clicks).
 - **LeetCode auto-sync** by username (uses the public GraphQL endpoint).
+- **Gmail auto-import**: connect Gmail once, your application-confirmation
+  emails get scanned and matching jobs added to the tracker automatically.
 - **Browser extension** that saves a job posting from LinkedIn / Indeed /
-  Greenhouse / Lever / Ashby / Workday in one click.
+  Greenhouse / Lever / Ashby / Workday in one click, plus an opt-in
+  auto-detect mode that watches every page for application submissions.
 - **Magic-link auth** via Supabase. Your data is in your Postgres,
   row-level-secured to your user.
 - **Clean UI** built with Next.js 14 (App Router), TypeScript, Tailwind,
@@ -46,7 +49,24 @@ Visit `http://localhost:3000` → enter your email → click the magic link.
 3. Add the same env vars from `.env.local` in **Project → Settings → Environment Variables**.
 4. Redeploy. Update Supabase **Site URL** to the Vercel URL.
 
-## 4. LeetCode sync
+## 4. Gmail auto-import (optional)
+
+1. Open [Google Cloud Console](https://console.cloud.google.com/), create a new project.
+2. **APIs & Services → Library** → enable **Gmail API**.
+3. **APIs & Services → OAuth consent screen** → External → fill in app name/email.
+   - Add scope: `.../auth/gmail.readonly` and `.../auth/userinfo.email`.
+   - Add yourself as a test user.
+4. **APIs & Services → Credentials → Create Credentials → OAuth Client ID**:
+   - Type: **Web application**
+   - Authorized redirect URI: `https://your-app.vercel.app/api/gmail/callback`
+     (and `http://localhost:3000/api/gmail/callback` for local dev)
+5. Copy the Client ID and Client Secret into Vercel env vars:
+   - `GOOGLE_CLIENT_ID`
+   - `GOOGLE_CLIENT_SECRET`
+6. In Supabase SQL editor, run `supabase/gmail.sql` to add the two extra tables.
+7. Redeploy. Visit `/settings` → click **Connect Gmail** → grant access → click **Sync now**.
+
+## 5. LeetCode sync
 
 Two ways:
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Briefcase, Code2, FolderGit2, Home, NotebookPen } from "lucide-react";
+import { Briefcase, Code2, FolderGit2, Home, NotebookPen, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { BrandMark } from "@/components/brand-mark";
@@ -13,6 +13,7 @@ const items = [
   { href: "/leetcode", label: "LeetCode", icon: Code2 },
   { href: "/projects", label: "Projects", icon: FolderGit2 },
   { href: "/daily", label: "Daily log", icon: NotebookPen },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function Nav() {
@@ -53,7 +54,7 @@ export function Nav() {
 export function MobileNav() {
   const pathname = usePathname();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-5 border-t border-border bg-surface md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 grid grid-cols-6 border-t border-border bg-surface md:hidden">
       {items.map((item) => {
         const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
         const Icon = item.icon;
