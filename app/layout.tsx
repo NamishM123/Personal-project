@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   description: "Track jobs, LeetCode, projects, and how you spend your summer.",
 };
 
+// Every page in this app is user-specific. Skip prerender so the build
+// doesn't try to statically render Supabase-authed routes (which fails
+// when env vars / cookies aren't available at build time).
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>

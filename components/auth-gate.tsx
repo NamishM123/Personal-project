@@ -7,7 +7,9 @@ import { Input, Label } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function AuthGate({ children }: { children: React.ReactNode }) {
-  const supabase = getSupabaseBrowser();
+  // Lazy-init so Supabase is never constructed during SSR / prerender —
+  // it only runs in the browser after hydration.
+  const [supabase] = useState(() => getSupabaseBrowser());
   const [ready, setReady] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [email, setEmail] = useState("");
