@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 0 0% 100%;
+  --surface: 0 0% 100%;
+  --surface-2: 220 14% 96%;
+  --border: 220 13% 91%;
+  --fg: 222 47% 11%;
+  --muted: 215 16% 47%;
+  --accent: 222 89% 55%;
+  --accent-fg: 0 0% 100%;
+  --success: 142 71% 40%;
+  --warn: 38 92% 50%;
+  --danger: 0 84% 60%;
+}
+
+.dark {
+  --bg: 222 47% 6%;
+  --surface: 222 47% 8%;
+  --surface-2: 222 30% 12%;
+  --border: 222 25% 18%;
+  --fg: 210 40% 96%;
+  --muted: 215 16% 65%;
+  --accent: 217 91% 60%;
+  --accent-fg: 0 0% 100%;
+  --success: 142 71% 45%;
+  --warn: 38 92% 55%;
+  --danger: 0 84% 65%;
+}
+
+html, body {
+  background: hsl(var(--bg));
+  color: hsl(var(--fg));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* { border-color: hsl(var(--border)); }
+
+::selection { background: hsl(var(--accent) / 0.25); }
+
+/* Scrollbar polish */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted) / 0.4); }

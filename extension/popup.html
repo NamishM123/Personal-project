@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Save job</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0b1020;
+        --fg: #f3f6ff;
+        --muted: #93a1c1;
+        --border: #1f2a44;
+        --accent: #3b82f6;
+        --danger: #ef4444;
+        --success: #22c55e;
+      }
+      @media (prefers-color-scheme: light) {
+        :root { --bg: #ffffff; --fg: #0b1020; --muted: #5a6478; --border: #e5e7eb; }
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; width: 360px; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, sans-serif; background: var(--bg); color: var(--fg); padding: 14px; }
+      h1 { font-size: 13px; margin: 0 0 10px; letter-spacing: -0.01em; }
+      label { display: block; font-size: 11px; color: var(--muted); margin: 8px 0 4px; }
+      input, select, textarea {
+        width: 100%; padding: 7px 9px; font-size: 13px;
+        background: transparent; color: var(--fg);
+        border: 1px solid var(--border); border-radius: 8px; outline: none;
+        font-family: inherit;
+      }
+      input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+      textarea { min-height: 60px; resize: vertical; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .actions { display: flex; gap: 6px; margin-top: 12px; justify-content: flex-end; }
+      button {
+        padding: 7px 12px; font-size: 12px; font-weight: 500;
+        border-radius: 8px; border: 1px solid var(--border);
+        background: transparent; color: var(--fg); cursor: pointer;
+      }
+      button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+      button.primary:disabled { opacity: 0.6; cursor: default; }
+      .status { font-size: 12px; margin-top: 8px; }
+      .status.ok { color: var(--success); }
+      .status.err { color: var(--danger); }
+      .hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+      a { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <h1>Save job to Summer Tracker</h1>
+    <div id="form">
+      <label>Company</label>
+      <input id="company" placeholder="Acme Corp" />
+      <div class="row">
+        <div>
+          <label>Title</label>
+          <input id="title" placeholder="Software Engineer" />
+        </div>
+        <div>
+          <label>Location</label>
+          <input id="location" placeholder="Remote" />
+        </div>
+      </div>
+      <label>URL</label>
+      <input id="url" />
+      <div class="row">
+        <div>
+          <label>Status</label>
+          <select id="status">
+            <option value="applied">Applied</option>
+            <option value="phone_screen">Phone screen</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div>
+          <label>Source</label>
+          <input id="source" placeholder="LinkedIn" />
+        </div>
+      </div>
+      <label>Notes</label>
+      <textarea id="notes" placeholder="Auto-detected from the page where possible"></textarea>
+
+      <div class="actions">
+        <button id="settings">Settings</button>
+        <button id="save" class="primary">Save</button>
+      </div>
+      <p class="status" id="status"></p>
+      <p class="hint" id="hint"></p>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
