@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useMemo, useRef, useCallback } from "react";
 
 interface InkRevealProps {
   /** RGB color of the mask overlay, e.g. [252, 250, 248] */
@@ -38,8 +38,12 @@ interface Stamp {
   rmax: number;
 }
 
+const DEFAULT_MASK: [number, number, number] = [252, 250, 248];
+const DEFAULT_WOBBLE: [number, number, number] = [0.14, 0.08, 0.05];
+const DEFAULT_STOPS: [number, number, number] = [0.95, 0.88, 0];
+
 export default function InkReveal({
-  maskColor = [252, 250, 248],
+  maskColor,
   brushSize = 128,
   lifetime = 600,
   rStart = 10,
@@ -47,19 +51,31 @@ export default function InkReveal({
   stampStep = 10,
   maxStamps = 200,
   segments = 36,
-  wobble = [0.14, 0.08, 0.05],
+  wobble,
   gradientInnerRadius = 0.2,
-  gradientStops = [0.95, 0.88, 0],
+  gradientStops,
   className,
   style,
 }: InkRevealProps) {
+  const mc = useMemo<[number, number, number]>(
+    () => maskColor ?? DEFAULT_MASK,
+    [maskColor]
+  );
+  const wob = useMemo<[number, number, number]>(
+    () => wobble ?? DEFAULT_WOBBLE,
+    [wobble]
+  );
+  const stops = useMemo<[number, number, number]>(
+    () => gradientStops ?? DEFAULT_STOPS,
+    [gradientStops]
+  );
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stampsRef = useRef<Stamp[]>([]);
   const runningRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
   const lastPosRef = useRef<{ x: number; y: number } | null>(null);
   const dimsRef = useRef({ w: 0, h: 0 });
-
-  const mc = maskColor;
 
   const resize = useCallback(() => {
     const canvas = canvasRef.current;
@@ -69,8 +85,8 @@ export default function InkReveal({
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const rect = parent.getBoundingClientRect();
-    const w = rect.width;
-    const h = rect.height;
+    const w = Math.max(1, rect.width);
+    const h = Math.max(1, rect.height);
     dimsRef.current = { w, h };
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
@@ -93,31 +109,33 @@ export default function InkReveal({
       seed: number,
       alpha: number
     ) => {
+      const safeR = Math.max(0.5, r);
       const g = ctx.createRadialGradient(
-        x, y, r * gradientInnerRadius,
-        x, y, r
+        x, y, safeR * gradientInnerRadius,
+        x, y, safeR
       );
-      g.addColorStop(0, `rgba(0,0,0,${gradientStops[0] * alpha})`);
-      g.addColorStop(0.5, `rgba(0,0,0,${gradientStops[1] * alpha})`);
-      g.addColorStop(1, `rgba(0,0,0,${gradientStops[2] * alpha})`);
+      g.addColorStop(0, `rgba(0,0,0,${stops[0] * alpha})`);
+      g.addColorStop(0.5, `rgba(0,0,0,${stops[1] * alpha})`);
+      g.addColorStop(1, `rgba(0,0,0,${stops[2] * alpha})`);
       ctx.fillStyle = g;
 
       ctx.beginPath();
       for (let i = 0; i <= segments; i++) {
         const a = (i / segments) * Math.PI * 2;
-        const wob =
+        const wMul =
           0.78 +
-          wobble[0] * Math.sin(a * 3 + seed) +
-          wobble[1] * Math.sin(a * 5 + seed * 2.1) +
-          wobble[2] * Math.sin(a * 7 + seed * 0.7);
-        const px = x + Math.cos(a) * r * wob;
-        const py = y + Math.sin(a) * r * wob;
-        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+          wob[0] * Math.sin(a * 3 + seed) +
+          wob[1] * Math.sin(a * 5 + seed * 2.1) +
+          wob[2] * Math.sin(a * 7 + seed * 0.7);
+        const px = x + Math.cos(a) * safeR * wMul;
+        const py = y + Math.sin(a) * safeR * wMul;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
       }
       ctx.closePath();
       ctx.fill();
     },
-    [segments, wobble, gradientInnerRadius, gradientStops]
+    [segments, wob, gradientInnerRadius, stops]
   );
 
   const addStamp = useCallback(
@@ -156,9 +174,17 @@ export default function InkReveal({
 
   const loop = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {
+      runningRef.current = false;
+      rafRef.current = null;
+      return;
+    }
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {
+      runningRef.current = false;
+      rafRef.current = null;
+      return;
+    }
     const { w, h } = dimsRef.current;
     const now = performance.now();
     const stamps = stampsRef.current;
@@ -181,23 +207,40 @@ export default function InkReveal({
     }
 
     if (stamps.length) {
-      requestAnimationFrame(loop);
+      rafRef.current = requestAnimationFrame(loop);
     } else {
       runningRef.current = false;
+      rafRef.current = null;
     }
   }, [carveInk, mc, lifetime, rStart]);
 
   const startLoop = useCallback(() => {
     if (!runningRef.current) {
       runningRef.current = true;
-      requestAnimationFrame(loop);
+      rafRef.current = requestAnimationFrame(loop);
     }
   }, [loop]);
 
   useEffect(() => {
     resize();
     window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+
+    let ro: ResizeObserver | null = null;
+    const parent = canvasRef.current?.parentElement;
+    if (parent && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => resize());
+      ro.observe(parent);
+    }
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      ro?.disconnect();
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      runningRef.current = false;
+    };
   }, [resize]);
 
   const getRelativePos = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -233,3 +276,4 @@ export default function InkReveal({
     />
   );
 }
+
