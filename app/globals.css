@@ -7,36 +7,36 @@
  * No pure white, no pure black, no purple/blue defaults.
  */
 :root {
-  --bg: 48 18% 98%;          /* warm paper, not #fff */
-  --surface: 0 0% 100%;
-  --surface-2: 40 14% 95%;
-  --border: 36 10% 88%;
-  --fg: 28 18% 10%;          /* warm ink, not #000 */
-  --muted: 30 6% 42%;
-  --accent: 158 56% 36%;     /* deep emerald, low chroma */
-  --accent-fg: 0 0% 100%;
-  --success: 158 56% 36%;
-  --warn: 35 88% 48%;
-  --danger: 358 70% 50%;
-  --ring: 158 56% 36% / 0.32;
+  --bg: 30 50% 98%;          /* ink paper rgb(252, 250, 248) */
+  --surface: 30 40% 99%;
+  --surface-2: 32 28% 95%;
+  --border: 30 14% 86%;
+  --fg: 24 22% 9%;           /* warm sumi-e ink */
+  --muted: 28 8% 40%;
+  --accent: 24 22% 9%;       /* ink-as-accent for the calligraphic vibe */
+  --accent-fg: 30 50% 98%;
+  --success: 158 48% 32%;
+  --warn: 30 88% 46%;
+  --danger: 8 72% 48%;
+  --ring: 24 22% 9% / 0.32;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .dark {
-  --bg: 30 8% 6%;            /* warm lacquer, not #000 */
-  --surface: 30 8% 8%;
-  --surface-2: 30 6% 12%;
-  --border: 30 5% 18%;
-  --fg: 40 10% 94%;          /* warm near-white */
-  --muted: 30 5% 62%;
-  --accent: 158 62% 50%;
-  --accent-fg: 30 18% 8%;
-  --success: 158 62% 50%;
-  --warn: 35 90% 60%;
-  --danger: 358 75% 65%;
-  --ring: 158 62% 50% / 0.4;
+  --bg: 24 14% 7%;           /* sumi ink lacquer */
+  --surface: 24 12% 9%;
+  --surface-2: 26 10% 13%;
+  --border: 28 8% 19%;
+  --fg: 30 24% 94%;          /* warm rice-paper */
+  --muted: 30 8% 62%;
+  --accent: 30 24% 94%;      /* paper-as-accent on dark ink */
+  --accent-fg: 24 14% 7%;
+  --success: 158 50% 58%;
+  --warn: 32 90% 62%;
+  --danger: 8 75% 66%;
+  --ring: 30 24% 94% / 0.36;
 }
 
 html, body {

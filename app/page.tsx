@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getSupabaseServer } from "@/lib/supabase/server";
-import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Stats } from "@/components/dashboard/stats";
 import { ActivityChart } from "@/components/dashboard/activity-chart";
+import { InkHero } from "@/components/dashboard/ink-hero";
 import { Badge } from "@/components/ui/badge";
 import { Empty } from "@/components/ui/empty";
 import { JOB_STATUS_LABEL, type Job, type LeetcodeProblem, type DailyLog, type Project } from "@/lib/types";
@@ -39,12 +39,13 @@ export default async function Dashboard() {
 
   const chart = build14DayActivity(jobs, lc);
 
+  const firstName = u.user?.email ? u.user.email.split("@")[0] : undefined;
+
   return (
     <div>
-      <PageHeader
-        title={`Hey${u.user?.email ? `, ${u.user.email.split("@")[0]}` : ""} \u{1F44B}`}
-        subtitle="Your summer at a glance. Tap Quick add to log anything in seconds."
-      />
+      <div className="px-6 pt-6 md:px-10 md:pt-10">
+        <InkHero name={firstName} />
+      </div>
       <div className="space-y-6 px-6 py-6 md:px-10">
         <Stats
           jobs7={jobs7}
